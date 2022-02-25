@@ -215,6 +215,40 @@ write(curr_host->send_fd, msg, n);
 usleep(TENMILLISEC);
 }
 
+/*
+ * Command host to receive file from another host
+ *
+ * User is queried for the
+ *    - name of the file to receive for download
+ *       the file is in the othher hosts current directory 'dir'
+ *    -id of the host to receive file from
+ *
+ *    A command message is sent to the current host
+ *    The message starts with 'd' followed by the 
+ *    -id of the destination host
+ *    -name of file to receive
+ */
+
+int file_download(struct man_port_at_man *host_list,
+      struct man_port_at_man *curr_host)
+{
+int n;
+int host_id;
+char name[NAME_LENGTH];
+char msg[NAME_LENGTH];
+
+printf("Enter file name to download: ");
+scanf("%s", name);
+printf("Enter host id of location:  ");
+scanf("%d", &host_id);
+printf("\n");
+
+n = sprintf(msg, "d %d %s", host_id, name);
+write(curr_host->send_fd, msg, n);
+usleep(TENMILLISEC);
+return 0;
+}
+
 
 /***************************** 
  * Main loop of the manager  *
@@ -258,7 +292,7 @@ while(1) {
 			file_upload(curr_host);
 			break;
 		case 'd': /* Download a file from a host */
-			printf("This command is not implemented\n");
+         file_download(host_list,curr_host);
 			break;
 		case 'q':  /* Quit */
 			return;

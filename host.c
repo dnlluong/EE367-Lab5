@@ -349,6 +349,9 @@ while(1) {
 
          new_packet = (struct packet *)
                         malloc(sizeof(struct packet));
+         for(i=0; name[i] != '\0'; ++i){
+                  new_packet->payload[i]=name[i];
+         }
          new_packet->src = (char) host_id;
          new_packet->dst = (char) dst;
          new_packet->type = (char) PKT_FILE_DOWNLOAD_REQ;
@@ -361,6 +364,7 @@ while(1) {
          job_q_add(&job_q, new_job);
 
          break;
+
 			default:
 			;
 		}
@@ -426,7 +430,7 @@ while(1) {
 					break;
             case (char) PKT_FILE_DOWNLOAD_REQ:
                new_job->type = JOB_FILE_UPLOAD_SEND;
-               for (i=0; i < in_packet->length; i++){
+               for (i=0; i < in_packet->length; ++i){
                      new_job->fname_upload[i]=in_packet->payload[i];
                }
                new_job->fname_upload[i]='\0';
