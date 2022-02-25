@@ -25,11 +25,11 @@ if (port->type == PIPE) {
 		msg[i+4] = p->payload[i];
 	}
 	write(port->pipe_send_fd, msg, p->length+4);
-//printf("PACKET SEND, src=%d dst=%d p-src=%d p-dst=%d\n", 
-//		(int) msg[0], 
-//		(int) msg[1], 
-//		(int) p->src, 
-//		(int) p->dst);
+printf("PACKET SEND, src=%d dst=%d p-src=%d p-dst=%d\n", 
+		(int) msg[0], 
+		(int) msg[1], 
+		(int) p->src, 
+		(int) p->dst);
 }
 
 return;

@@ -343,6 +343,24 @@ while(1) {
 				job_q_add(&job_q, new_job);
 					
 				break;
+
+         case 'd': /* Download a file from another host */
+         sscanf(man_msg, "%d %s", &dst, name);
+
+         new_packet = (struct packet *)
+                        malloc(sizeof(struct packet));
+         new_packet->src = (char) host_id;
+         new_packet->dst = (char) dst;
+         new_packet->type = (char) PKT_FILE_DOWNLOAD_REQ;
+
+         new_job = (struct host_job *)
+                     malloc(sizeof(struct host_job));
+         new_job->type = JOB_SEND_PKT_ALL_PORTS;
+         new_job->file_upload_dst = dst;
+         new_job->packet = new_packet;
+         job_q_add(&job_q, new_job);
+
+         break;
 			default:
 			;
 		}
@@ -406,6 +424,17 @@ while(1) {
 						= JOB_FILE_UPLOAD_RECV_END;
 					job_q_add(&job_q, new_job);
 					break;
+            case (char) PKT_FILE_DOWNLOAD_REQ:
+               new_job->type = JOB_FILE_UPLOAD_SEND;
+               for (i=0; i < in_packet->length; i++){
+                     new_job->fname_upload[i]=in_packet->payload[i];
+               }
+               new_job->fname_upload[i]='\0';
+                  new_job->file_upload_dst=in_packet->src;
+               job_q_add(&job_q, new_job);
+               free(in_packet);
+               break;
+
 				default:
 					free(in_packet);
 					free(new_job);
