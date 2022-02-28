@@ -430,11 +430,11 @@ while(1) {
 					break;
             case (char) PKT_FILE_DOWNLOAD_REQ:
                new_job->type = JOB_FILE_UPLOAD_SEND;
-               for (i=0; i < in_packet->length; ++i){
-                     new_job->fname_upload[i]=in_packet->payload[i];
+               for(i=0; i<in_packet->length; i++){
+                  new_job->fname_upload[i]=in_packet->payload[i];
                }
                new_job->fname_upload[i]='\0';
-                  new_job->file_upload_dst=in_packet->src;
+               new_job->file_upload_dst=in_packet->src;
                job_q_add(&job_q, new_job);
                free(in_packet);
                break;

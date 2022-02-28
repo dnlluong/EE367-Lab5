@@ -52,11 +52,11 @@ if (port->type == PIPE) {
 			p->payload[i] = msg[i+4];
 		}
 
-// printf("PACKET RECV, src=%d dst=%d p-src=%d p-dst=%d\n", 
-//		(int) msg[0], 
-//		(int) msg[1], 
-//		(int) p->src, 
-//		(int) p->dst);
+ printf("PACKET RECV, src=%d dst=%d p-src=%d p-dst=%d\n", 
+		(int) msg[0], 
+		(int) msg[1], 
+		(int) p->src, 
+		(int) p->dst);
 	}
 }
 
