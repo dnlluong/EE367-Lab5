@@ -349,17 +349,20 @@ while(1) {
 
          new_packet = (struct packet *)
                         malloc(sizeof(struct packet));
-         for(i=0; name[i] != '\0'; ++i){
-                  new_packet->payload[i]=name[i];
-         }
+         printf("In Packet Send File Download Fname = %s\n",new_packet->payload);
          new_packet->src = (char) host_id;
          new_packet->dst = (char) dst;
          new_packet->type = (char) PKT_FILE_DOWNLOAD_REQ;
+         for (i=0; name[i] != '\0'; i++) {
+					new_packet->payload[i] = name[i];
+				}
+				new_packet->payload[i] = '\0';
+         new_packet->length=i;
 
          new_job = (struct host_job *)
                      malloc(sizeof(struct host_job));
          new_job->type = JOB_SEND_PKT_ALL_PORTS;
-         new_job->file_upload_dst = dst;
+         new_job->file_upload_dst =dst;
          new_job->packet = new_packet;
          job_q_add(&job_q, new_job);
 
@@ -430,10 +433,11 @@ while(1) {
 					break;
             case (char) PKT_FILE_DOWNLOAD_REQ:
                new_job->type = JOB_FILE_UPLOAD_SEND;
-               for(i=0; i<in_packet->length; i++){
-                  new_job->fname_upload[i]=in_packet->payload[i];
+              	for(i=0; i < in_packet->length; ++i){
+					new_job->fname_upload[i] = in_packet->payload[i];
                }
-               new_job->fname_upload[i]='\0';
+					new_job->fname_upload[i] = '\0';
+               printf("In Packet Receive File Download file upload name %s\n",new_job->fname_upload);
                new_job->file_upload_dst=in_packet->src;
                job_q_add(&job_q, new_job);
                free(in_packet);
