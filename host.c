@@ -431,14 +431,24 @@ while(1) {
 						= JOB_FILE_UPLOAD_RECV_END;
 					job_q_add(&job_q, new_job);
 					break;
+
+				/* 
+				 * The next packet type is
+				 * for the download file operation.
+				 *
+				 * The first type is the request packet
+				 * which includes the file name in
+				 * the payload.
+				 */
+	
             case (char) PKT_FILE_DOWNLOAD_REQ:
                new_job->type = JOB_FILE_UPLOAD_SEND;
               	for(i=0; i < in_packet->length; ++i){
-					new_job->fname_upload[i] = in_packet->payload[i];
+					   new_job->fname_upload[i] = in_packet->payload[i];
                }
 					new_job->fname_upload[i] = '\0';
                printf("In Packet Receive File Download file upload name %s\n",new_job->fname_upload);
-               new_job->file_upload_dst=in_packet->src;
+               new_job->file_upload_dst = in_packet->src;
                job_q_add(&job_q, new_job);
                free(in_packet);
                break;
@@ -537,7 +547,7 @@ while(1) {
 				fp = fopen(name, "r");
 				if (fp != NULL) {
 
-				        /* 
+				   /* 
 					 * Create first packet which
 					 * has the file name 
 					 */
@@ -606,7 +616,8 @@ while(1) {
 				}
 				else {  
 					/* Didn't open file */
-				}
+				   printf("DEBUG: ERROR: file could not be opened\n");
+            }
 			}
 			break;
 
